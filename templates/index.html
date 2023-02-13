@@ -8,12 +8,11 @@
   <body>
     <div class="main-container">
       <form class="sub-container">
-        <input class="input"  id="estimated" type="number" />
-        <input class="input" id="actual" type="number" />
+        <input class="input" placeholder="Estimated target"  id="estimated" type="number" />
+        <input class="input" placeholder="Achieved target" id="actual" type="number" />
         <button class='btn' type="button" onclick="getOutput()">click</button>
       </form>
       <div id="result" class="result-container">
-        
       </div>
     </div>
    <script src="{% static 'app.js' %}"></script>
