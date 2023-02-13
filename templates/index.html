@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <title>Home Page</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <form class="sub-container">
+        <input class="input"  id="estimated" type="number" />
+        <input class="input" id="actual" type="number" />
+        <button class='btn' type="button" onclick="getOutput()">click</button>
+      </form>
+      <div id="result" class="result-container">
+        
+      </div>
+    </div>
+   <script src="{% static 'app.js' %}"></script>
+  </body>
+</html>
