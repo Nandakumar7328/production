@@ -6,6 +6,11 @@
     <title>result</title>
   </head>
   <body>
+    <div>
+      <nav class='nav-container'>
+        <img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/>
+        <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+      </nav>
     <div class="main-container">
       <form class="sub-container" action="/updateData/{{datas.id}}" method="POST" autocomplete="off">
         {% csrf_token %}
@@ -13,11 +18,9 @@
         <input class="input" name="Estimated"  placeholder="Estimated target" value={{datas.Estimated_target}}  type="number" />
         <lable class="leble">Achieved target</lable>
         <input class="input" name="Achieved" placeholder="Achieved target" value={{datas.Achieved_target}}  type="number" />
-        <lable class="leble">Score</lable>
-        <input class="input" name="Score" placeholder="Score" value={{datas.Score}}  type="number" />
-        <lable class="leble">Bonus</lable>
-        <input class="input" name="Bonus" placeholder="Bonus" value={{datas.Bonus}}  type="number" />
         <button class='btn' type="submit">Update</button>
       </form>
+    </div>
+  </div>
   </body>
 </html>
