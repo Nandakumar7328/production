@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <title>result</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <form class="sub-container" action="/updateData/{{datas.id}}" method="POST" autocomplete="off">
+        {% csrf_token %}
+        <lable class="leble">Estimated target</lable>
+        <input class="input" name="Estimated"  placeholder="Estimated target" value={{datas.Estimated_target}}  type="number" />
+        <lable class="leble">Achieved target</lable>
+        <input class="input" name="Achieved" placeholder="Achieved target" value={{datas.Achieved_target}}  type="number" />
+        <lable class="leble">Score</lable>
+        <input class="input" name="Score" placeholder="Score" value={{datas.Score}}  type="number" />
+        <lable class="leble">Bonus</lable>
+        <input class="input" name="Bonus" placeholder="Bonus" value={{datas.Bonus}}  type="number" />
+        <button class='btn' type="submit">Update</button>
+      </form>
+  </body>
+</html>

@@ -7,14 +7,49 @@
   </head>
   <body>
     <div class="main-container">
-      <form class="sub-container">
-        <input class="input" placeholder="Estimated target"  id="estimated" type="number" />
-        <input class="input" placeholder="Achieved target" id="actual" type="number" />
-        <button class='btn' type="button" onclick="getOutput()">click</button>
+      {% block content%}
+      <form class="sub-container" action='addData' method="POST" autocomplete="off">
+        {% csrf_token %}
+        <lable class="leble">Estimated target</lable>
+        <input class="input" name="one" placeholder="Estimated target"   type="number" />
+        <lable class="leble">Achieved target</lable>
+        <input class="input" name="two" placeholder="Achieved target"  type="number" />
+        <button class='btn' type="submit">click</button>
       </form>
-      <div id="result" class="result-container">
+      <div  class="result-container">
+        <h1 class='heding'>View Details</h1>
+        <table>
+         <thead>
+          <tr class='table'>
+            <th class='each-table'>S.No</th>
+            <th class='each-table'>Estimated target</th>
+            <th class='each-table'>Achieved target</th>
+            <th class='each-table'>Score</th>
+            <th class='each-table'>Bonus</th>
+            <th class='each-table'>Date</th>
+            <th class='each-table'>Time</th>
+            <th class='each-table'>Edit</th>
+            <th class='each-table'>Delete</th>
+           
+          </tr>
+        </thead>
+        {% for data in datas%}
+          <tbody class='result-para'>
+            <td>{{forloop.counter}}</td>
+            <td>{{data.Estimated_target}}</td>
+            <td>{{data.Achieved_target}}</td>
+            <td>{{data.Score}}</td>
+            <td>{{data.Bonus}}</td>
+            <td>{{data.Datetime}}</td>
+            <td>{{data.Time}}</td>
+            <td><a href='updateData/{{data.id}}'><button class='edit-btn'>Edit</button></a></td>
+            <td><a href='deleteData/{{data.id}}'><button class='delete-btn'>Delete</button></a></td>
+            
+          </tbody>
+          {% endfor%} 
+        </table>
       </div>
     </div>
-   <script src="{% static 'app.js' %}"></script>
+    {% endblock %}
   </body>
 </html>

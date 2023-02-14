@@ -11,7 +11,7 @@ body{
   justify-content: space-around;
   align-items: center;
   height: 100vh;
- 
+ padding: 10px;
   width: 100vw;
   background-color: black;
 }
@@ -39,21 +39,63 @@ body{
 .result-container{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  min-width: 400px;
   border: solid red 1px;
   height: 300px;
+  border-radius: 7px;
   overflow-y: auto;
+  padding: 20px;
+  margin: 10px;
 }
 
 .temp{
   color: blue;
   background-color: antiquewhite;
   padding: 10px;
+  color: white;
   border-radius: 7px;
 }
-.para{
-  color: red;
+.leble{
+  color: white;
   font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+  margin-left: 10px;
+}
+.heding{
+  color: white;
+ 
+}
+.table{
+  background-color: white;
+  padding: 10px;
+  border-radius: 7px;
+  
+}
+.each-table{
+  margin: 10px;
+}
+.result-para{
+  color: white;
+  
+}
+.edit-btn{
+  background-color: green;
+  color: white;
+  outline: none;
+  cursor: pointer;
+  padding: 6px;
+  border-width: 0px;
+  border-radius: 7px;
+}
+.delete-btn{
+  background-color: red;
+  color: white;
+  outline: none;
+  cursor: pointer;
+  padding: 6px;
+  border-width: 0px;
+  border-radius: 7px;
 }
