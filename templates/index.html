@@ -12,6 +12,11 @@
         <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
       </nav>
     <div class="main-container">
+      <nav class='side-bar'>
+        <div class='dashbord-containetr'>
+          <a href='dashboard'><h1 class='dashbord'>Dashboard</h1></a>
+        </div>
+      </nav>
       {% block content%}
       <form class="sub-container" action='' method="POST" autocomplete="off">
         {% csrf_token %}

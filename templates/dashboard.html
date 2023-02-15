@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <script src="{% static 'apexcharts.esm.js' %}"></script>
+    <script src="{% static 'apexcharts.js' %}"></script>
+    <script src="{% static 'apexcharts.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'apexcharts.css' %}">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <div>
+      <nav class='nav-container'>
+        <a href='home'><img half='' src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
+        <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+      </nav>
+    <div class="main-container-dashboard">
+      <nav class='side-bar'>
+        <div class='dashbord-containetr'>
+          <a href=''><h1 class='dashbord'>Dashboard</h1></a>
+        </div>
+      </nav>
+      <div class='dashbord-containetr-over'>
+      <div class='date-card-conatiner'>
+        <form method="POST" action="dashboard">
+            {% csrf_token %}
+            <label for="my-date-input" class='label-dashbord'>Select Date:</label>
+            <input class='date' type="date" id="my-date-input" name="date">
+            <button class='filter-btn' type="submit">Filter</button>
+          </form>
+      <div class='card-container'>
+        <div class='top-score-card'>
+            <h1>Best Score</h1>
+            <p>{{topscore.top}}</p>
+        </div>
+        <div class='low-score-card'>
+            <h1>Low Score</h1>
+            <p> {{topscore.low}}</p>
+           </div>
+      </div>
+      <div  class="result-container">
+        <h1 class='heding'>Rank Details</h1>
+        <table id="datatable">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Estimated Target</th>
+                    <th>Achieved Target</th>
+                    <th>Score</th>
+                    <th>Bonus</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                {% for data_obj in topscore.allData %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{ data_obj.Estimated_target }}</td>
+                    <td>{{ data_obj.Achieved_target }}</td>
+                    <td>{{ data_obj.Score }}</td>
+                    <td>{{ data_obj.Bonus }}</td>
+                    <td>{{ data_obj.Datetime }}</td>
+                    <td>{{ data_obj.Time }}</td>
+                    <td><a href='updateData/{{data_obj.id}}'><button class='edit-btn'>Edit</button></a></td>
+                    <td><a href='deleteData/{{data_obj.id}}'><button class='delete-btn'>Delete</button></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+       <div id="chart" class='chart'></div>
+        <script>
+          const chartSeries = {{ topscore.chart_series|safe }};
+    
+          const options = {
+            chart: {
+              type: 'bar',
+            },
+            series: [chartSeries],
+            xaxis: {
+              type: 'date',
+            },
+            yaxis: {
+              min: 0,
+            },
+          };
+    
+          const chart = new ApexCharts(document.querySelector('#chart'), options);
+          chart.render();
+        </script>
+       
+      <div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function() {
+        $('#datatable').DataTable();
+    });
+    </script>
+  </body>
+</html>
