@@ -3,6 +3,9 @@
   <head>
     {% load static %}
     <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
     <title>Home Page</title>
   </head>
   <body>
@@ -14,7 +17,7 @@
     <div class="main-container">
       <nav class='side-bar'>
         <div class='dashbord-containetr'>
-          <a href='dashboard'><h1 class='dashbord'>Dashboard</h1></a>
+          <a class='dashbord' href='dashboard'><h1 >Dashboard</h1></a>
         </div>
       </nav>
       {% block content%}
@@ -28,40 +31,47 @@
       </form>
       <div  class="result-container">
         <h1 class='heding'>View Details</h1>
-        <table>
-         <thead>
-          <tr class='table'>
-            <th class='each-table'>S.No</th>
-            <th class='each-table'>Estimated target</th>
-            <th class='each-table'>Achieved target</th>
-            <th class='each-table'>Score</th>
-            <th class='each-table'>Bonus</th>
-            <th class='each-table'>Date</th>
-            <th class='each-table'>Time</th>
-            <th class='each-table'>Edit</th>
-            <th class='each-table'>Delete</th>
-           
-          </tr>
-        </thead>
-        {% for data in datas%}
-          <tbody class='result-para'>
-            <td>{{forloop.counter}}</td>
-            <td>{{data.Estimated_target}}</td>
-            <td>{{data.Achieved_target}}</td>
-            <td>{{data.Score}}</td>
-            <td>{{data.Bonus}}</td>
-            <td>{{data.Datetime}}</td>
-            <td>{{data.Time}}</td>
-            <td><a href='updateData/{{data.id}}'><button class='edit-btn'>Edit</button></a></td>
-            <td><a href='deleteData/{{data.id}}'><button class='delete-btn'>Delete</button></a></td>
-            
+        <table class='table' id="datatable">
+          <thead>
+              <tr>
+                  <th>S.No</th>
+                  <th>Estimated Target</th>
+                  <th>Achieved Target</th>
+                  <th>Score</th>
+                  <th>Bonus</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+                 
+              </tr>
+          </thead>
+          <tbody>
+              {% for data_obj in datas %}
+              <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{ data_obj.Estimated_target }}</td>
+                  <td>{{ data_obj.Achieved_target }}</td>
+                  <td>{{ data_obj.Score }}</td>
+                  <td>{{ data_obj.Bonus }}</td>
+                  <td>{{ data_obj.Datetime }}</td>
+                  <td>{{ data_obj.Time }}</td>
+                  <td><a href='updateData/{{data_obj.id}}'><button class='edit-btn'>Edit</button></a></td>
+                  <td><a href='deleteData/{{data_obj.id}}'><button class='delete-btn'>Delete</button></a></td>
+              </tr>
+              {% endfor %}
           </tbody>
-          {% endfor%} 
-        </table>
+      </table>
+        
       </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function() {
+        $('#datatable').DataTable();
+    });
+    </script>
     {% endblock %}
-
+  
   </body>
 </html>

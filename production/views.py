@@ -91,8 +91,9 @@ def deleteData(request,id):
 
 def dashboard(request):
     if request.method == 'POST':
-        selected_date_str = request.POST.get('date')
-        selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
+        selected_date_str = request.POST.get('datetime')
+        print(selected_date_str,'selected')
+        selected_date = datetime.strftime(selected_date_str, '%Y-%m-%d').date()
         print(selected_date)
         top_score = Data.objects.filter(Datetime=selected_date).aggregate(Max('Score'))['Score__max']
         low_score =  Data.objects.filter(Datetime=selected_date).aggregate(Min('Score'))['Score__min']
@@ -115,4 +116,4 @@ def dashboard(request):
         return render(request,'dashboard.html',{'topscore':send_data})
 
 def return_home(request) :
-    return redirect('home')    
+   return redirect('home')  

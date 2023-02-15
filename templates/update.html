@@ -8,10 +8,12 @@
   <body>
     <div>
       <nav class='nav-container'>
-        <img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/>
+        <a href='home'><img  src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
         <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
       </nav>
     <div class="main-container">
+      <div class='dashbord-containetr-over'>
+        <div class='date-card-conatiner'>
       <form class="sub-container" action="/updateData/{{datas.id}}" method="POST" autocomplete="off">
         {% csrf_token %}
         <lable class="leble">Estimated target</lable>
@@ -20,6 +22,8 @@
         <input class="input" name="Achieved" placeholder="Achieved target" value={{datas.Achieved_target}}  type="number" />
         <button class='btn' type="submit">Update</button>
       </form>
+    </div>
+  </div>
     </div>
   </div>
   </body>
