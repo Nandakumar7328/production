@@ -15,6 +15,7 @@ def home(request):
         estimated = int(request.POST["one"])
         achived = int(request.POST["two"])
         result = round((achived/ estimated)* 100)
+        user_id = request.user.id
         bonus = 0 
         if result > estimated :
             bonus = result - estimated 
@@ -22,18 +23,20 @@ def home(request):
         dt_string = now.strftime('%Y-%m-%d')
         time_str = now.strftime( '%H:%M:%S')
         
+        
         Data.objects.create(
             Estimated_target = estimated,
             Achieved_target = achived,
             Score = result,
             Bonus = bonus,
             Datetime = dt_string,
-            Time = time_str
+            Time = time_str,
+            user_id=user_id
         )
         return redirect('home')
     
-    
-    data = Data.objects.all()
+    user_id = request.user.id
+    data = Data.objects.filter(user_id=user_id)
     print(data,"me")
     if (data != ''):
          return render(request, 'index.html',{'datas':data})
@@ -53,7 +56,7 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'register/register.html', {'form': form})
-
+@login_required
 def updateData(request,id):
     myData = Data.objects.get(id=id)
     if request.method == "POST":
@@ -78,13 +81,13 @@ def updateData(request,id):
         return redirect('home')
         
     return render(request,'update.html',{'datas':myData})
-
+@login_required
 def deleteData(request,id):
     myData = Data.objects.get(id=id)
     myData.delete()
     return redirect('home')
 
-
+@login_required
 def dashboard(request):
     if request.method == 'POST':
         try:
@@ -102,11 +105,12 @@ def dashboard(request):
                  print(shift,'shift')
                  now = datetime.now()
                  dt_string = now.strftime('%Y-%m-%d')
+                 user_id = request.user.id
                  start_datetime = datetime.combine(datetime.strptime(dt_string, '%Y-%m-%d'), start_time)
                  end_datetime = datetime.combine(datetime.strptime(dt_string, '%Y-%m-%d'), end_time)
-                 top_score = Data.objects.filter(Datetime=dt_string, Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
-                 low_score = Data.objects.filter(Datetime=dt_string, Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
-                 all_order_data = Data.objects.filter(Datetime=dt_string,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
+                 top_score = Data.objects.filter(Datetime=dt_string, user_id=user_id,Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
+                 low_score = Data.objects.filter(Datetime=dt_string,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
+                 all_order_data = Data.objects.filter(Datetime=dt_string,user_id=user_id,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
                  chart_series = {
                 'name': 'Scores',
                 'data': [{'x': item.Datetime.strftime("%Y-%m-%d"), 'y': item.Score} for item in all_order_data],
@@ -120,11 +124,12 @@ def dashboard(request):
             print(shift,'shift')
             date = datetime.strptime(value, '%Y-%m-%d').date()
             print(date)
+            user_id = request.user.id
             start_datetime = datetime.combine(date, start_time)
             end_datetime = datetime.combine(date, end_time)
-            top_score = Data.objects.filter(Datetime=date, Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
-            low_score = Data.objects.filter(Datetime=date, Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
-            all_order_data = Data.objects.filter(Datetime=date,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
+            top_score = Data.objects.filter(Datetime=date,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
+            low_score = Data.objects.filter(Datetime=date,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
+            all_order_data = Data.objects.filter(Datetime=date,user_id=user_id,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
             chart_series = {
             'name': 'Scores',
             'data': [{'x': item.Datetime.strftime("%Y-%m-%d"), 'y': item.Score} for item in all_order_data],
@@ -136,10 +141,11 @@ def dashboard(request):
         except MultiValueDictKeyError:
             pass
     else:
-        top_score = Data.objects.aggregate(Max('Score'))['Score__max']
-        low_score = Data.objects.aggregate(Min('Score'))['Score__min']
-        all_order_data = Data.objects.order_by('-Score')
-        chart_data = Data.objects.all()
+        user_id = request.user.id
+        top_score = Data.objects.filter(user_id=user_id).aggregate(Max('Score'))['Score__max']
+        low_score = Data.objects.filter(user_id=user_id).aggregate(Min('Score'))['Score__min']
+        all_order_data = Data.objects.filter(user_id=user_id).order_by('-Score')
+        chart_data = Data.objects.filter(user_id=user_id)
         chart_series = {
             'name': 'Scores',
             'data': [{'x': item.Datetime.strftime("%Y-%m-%d"), 'y': item.Score} for item in chart_data],
@@ -148,6 +154,6 @@ def dashboard(request):
         print(chart_series)
         send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'chart_series': chart_series}
         return render(request,'dashboard.html',{'topscore':send_data})
-
+@login_required
 def return_home(request) :
    return redirect('home')  
