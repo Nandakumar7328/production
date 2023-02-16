@@ -26,7 +26,7 @@
       </nav>
       <div class='dashbord-containetr-over'>
       <div class='date-card-conatiner'>
-        <form method="POST" action="">
+        <form method="POST" action="/dashboard">
             {% csrf_token %}
             <label for="my-date-input" class='label-dashbord'>Select Date:</label>
             <input class='date' type="date" id="my-date-input" name="datetime">
@@ -37,6 +37,7 @@
             <h1>Best Score</h1>
             <p>{{topscore.top}}</p>
         </div>
+        
         <div class='low-score-card'>
             <h1>Low Score</h1>
             <p> {{topscore.low}}</p>
