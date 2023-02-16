@@ -11,8 +11,13 @@
   <body>
     <div>
       <nav class='nav-container'>
-        <img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/>
+        <div class='sub'>
+        <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
         <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+        </div>
+          <div class='sub'>
+        <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
+        </div>
       </nav>
     <div class="main-container">
       <nav class='side-bar'>

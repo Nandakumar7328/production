@@ -15,8 +15,13 @@
   <body>
     <div>
       <nav class='nav-container'>
-        <a href='home'><img  src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
+        <div class='sub'>
+          <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
         <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+        </div>
+          <div class='sub'>
+        <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
+        </div>
       </nav>
     <div class="main-container-dashboard">
       <nav class='side-bar'>
@@ -26,10 +31,14 @@
       </nav>
       <div class='dashbord-containetr-over'>
       <div class='date-card-conatiner'>
-        <form method="POST" action="/dashboard">
+        <form method="POST" action="/dashboard" class='filter-container'>
             {% csrf_token %}
             <label for="my-date-input" class='label-dashbord'>Select Date:</label>
             <input class='date' type="date" id="my-date-input" name="datetime">
+            <select name='shift' class='input-time'>
+              <option>6 AM to 12 PM</option>
+              <option>1PM to 6 PM</option>
+            </select>
             <button class='filter-btn' type="submit">Filter</button>
           </form>
       <div class='card-container'>
