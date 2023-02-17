@@ -22,7 +22,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12 col-centered">
-          <h1 class="mt-5 mb-3">Login</h1>
+          <h1 class="mt-5 mb-3" style='color:red; font-weight:bold;'>Login</h1>
         </div>
       </div>
       <div class="row">
@@ -51,14 +51,14 @@
               />
             </div>
             {% if form.non_field_errors %} {% for error in form.non_field_errors %}
-            <p style="font-size: 13px;">
+            <p style="font-size: 13px; color:red;">
               {{ error|escape }}
             </p>
             {% endfor %} {% endif %}
             <button type="submit" class="btn btn-primary">Login</button>
             
           </form>
-          <a href='/register'><button class="btn btn-primary register">Register</button></a>
+          <a href='/register'><button class="btn btn-primary register">Sign Up</button></a>
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@
     <div class="container">
         <div class="row">
           <div class="col-md-12 col-centered">
-            <h1 class="mt-5 mb-3">Register</h1>
+            <h1 class="mt-5 mb-3" style='color:red; font-weight:bold;'>Register</h1>
           </div>
         </div>
         <div class="row">
@@ -41,11 +41,11 @@
                 />
               </div>
               {% if field.errors %} {% for error in field.errors %}
-              <p style="font-size: 13px;">
+              <p style="font-size: 13px; color:red;">
                 {{ error|escape }}
               </p>
               {% endfor %} {% endif %} {% endfor %}
-              <button type="submit" class="btn btn-primary mt-2">Register</button>
+              <button type="submit" class="btn btn-primary mt-2" >Register</button>
             </form>
           </div>
         </div>
