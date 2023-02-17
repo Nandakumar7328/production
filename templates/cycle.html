@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block content %}
+{% load static %}
+<div class='deshbord-container'>
+    <nav class='nav-container'>
+      <div class='sub'>
+      <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
+      <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+      </div>
+        <div class='sub'>
+      <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
+      </div>
+    </nav>
+    <div class='dashboard-sub-container'>
+      <nav class='side-bar'>
+        <a href='home'><i class="fa-solid fa-house bar"></i></a>
+        <a href='dashboard'><i class="fa-solid fa-desktop bar"></i></a>
+        <a href='cycle'> <i class="fa-solid fa-bicycle bar"></i></a>
+    </nav>
+    <div class='content-container'>
+        <div class='score-card-conatiner'>
+            <div class='top-score-card' style='text-align:center; background-color:#fefefe;'>
+                 <h1>Average duration</h1>
+                 <p>{{cycle_data.duration}}</p>
+             </div>
+             
+             <div class='low-score-card' style='text-align:center; background-color:#fefefe;'>
+                 <h1>No of Cycle</h1>
+                 <p> {{cycle_data.count}}</p>
+                </div>
+         </div>
+    </div>
+</div>
+{% endblock %}

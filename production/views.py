@@ -4,10 +4,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max,Min
+from django.db.models import Max,Min, Avg,F, DateTimeField,Count, Window
+from django.db.models.functions import Trunc
 from datetime import datetime,time
+from django.db.models.functions import Cast
+from django.db.models import FloatField
 from django.utils.datastructures import MultiValueDictKeyError
-from .models import Data
+from .models import Data,Process
+from django.db.models.expressions import RawSQL
+
+
+
 
 @login_required
 def home(request):
@@ -155,5 +162,18 @@ def dashboard(request):
         send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'chart_series': chart_series}
         return render(request,'dashboard.html',{'topscore':send_data})
 @login_required
+def cycle(request):
+    avg_duration = Process.objects.annotate(duration_float=Cast('duration', FloatField())).aggregate(Avg('duration_float'))['duration_float__avg']
+    print(avg_duration)
+    unique_cycle_count = Process.objects.distinct('cycle_number').count()
+    print(unique_cycle_count)
+    data_store = Process.objects.all()
+    print(data_store)
+    result_object = {}
+    for i in data_store:
+        result_object[i.cycle_number] = i.duration
+    print(result_object)
+    cycleData = {'duration':round(avg_duration),'count':unique_cycle_count}
+    return render(request,'cycle.html',{'cycle_data':cycleData})
 def return_home(request) :
-   return redirect('home')  
+    return redirect('home')  

@@ -1,82 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'index.css' %}">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-    <title>Home Page</title>
-  </head>
-  <body>
-    <div>
-      <nav class='nav-container'>
-        <div class='sub'>
-        <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
-        <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
-        </div>
-          <div class='sub'>
-        <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
-        </div>
-      </nav>
-    <div class="main-container">
-      <nav class='side-bar'>
-        <div class='dashbord-containetr'>
-          <a class='dashbord' href='dashboard'><h1 >Dashboard</h1></a>
-        </div>
-      </nav>
-      {% block content%}
-      <form class="sub-container" action='' method="POST" autocomplete="off">
-        {% csrf_token %}
-        <lable class="leble">Estimated target</lable>
-        <input class="input" name="one" placeholder="Estimated target"   type="number" />
-        <lable class="leble">Achieved target</lable>
-        <input class="input" name="two" placeholder="Achieved target"  type="number" />
-        <button class='btn' type="submit">click</button>
-      </form>
-      <div  class="result-container">
-        <h1 class='heding'>View Details</h1>
-        <table class='table' id="datatable">
-          <thead>
-              <tr>
-                  <th>S.No</th>
-                  <th>Estimated Target</th>
-                  <th>Achieved Target</th>
-                  <th>Score</th>
-                  <th>Bonus</th>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                 
-              </tr>
-          </thead>
-          <tbody>
-              {% for data_obj in datas %}
-              <tr>
-                  <td>{{forloop.counter}}</td>
-                  <td>{{ data_obj.Estimated_target }}</td>
-                  <td>{{ data_obj.Achieved_target }}</td>
-                  <td>{{ data_obj.Score }}</td>
-                  <td>{{ data_obj.Bonus }}</td>
-                  <td>{{ data_obj.Datetime }}</td>
-                  <td>{{ data_obj.Time }}</td>
-                  <td><a href='updateData/{{data_obj.id}}'><button class='edit-btn'>Edit</button></a></td>
-                  <td><a href='deleteData/{{data_obj.id}}'><button class='delete-btn'>Delete</button></a></td>
-              </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-        
-      </div>
+{% extends 'base.html' %} {% block content %}
+{% load static %}
+<div class='deshbord-container'>
+  <nav class='nav-container'>
+    <div class='sub'>
+    <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
+    <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+    </div>
+      <div class='sub'>
+    <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
+    </div>
+  </nav>
+  <div class='dashboard-sub-container'>
+    <nav class='side-bar'>
+      <a href='home'><i class="fa-solid fa-house bar"></i></a>
+      <a href='dashboard'><i class="fa-solid fa-desktop bar"></i></a>
+      <a href='cycle'> <i class="fa-solid fa-bicycle bar"></i></a>
+  </nav>
+  <div class='content-container-home'>
+    <form class="sub-container" action='' method="POST" autocomplete="off">
+      {% csrf_token %}
+      <lable class="leble">Estimated target</lable>
+      <input class="input" name="one" placeholder="Estimated target"   type="number" />
+      <lable class="leble">Achieved target</lable>
+      <input class="input" name="two" placeholder="Achieved target"  type="number" />
+      <button class='btn' type="submit">click</button>
+    </form>
+    <div  class="result-container">
+      <h1 class='heding'>View Details</h1>
+      <table class='table' id="datatable">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Estimated Target</th>
+                <th>Achieved Target</th>
+                <th>Score</th>
+                <th>Bonus</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Edit</th>
+                <th>Delete</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            {% for data_obj in datas %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{ data_obj.Estimated_target }}</td>
+                <td>{{ data_obj.Achieved_target }}</td>
+                <td>{{ data_obj.Score }}</td>
+                <td>{{ data_obj.Bonus }}</td>
+                <td>{{ data_obj.Datetime }}</td>
+                <td>{{ data_obj.Time }}</td>
+                <td><a href='updateData/{{data_obj.id}}'><button class='edit-btn'>Edit</button></a></td>
+                <td><a href='deleteData/{{data_obj.id}}'><button class='delete-btn'>Delete</button></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     </div>
   </div>
-  <script>
-    $(document).ready(function() {
-        $('#datatable').DataTable();
-    });
-    </script>
-    {% endblock %}
+</div>
+<script>
+  $(document).ready(function() {
+      $('#datatable').DataTable();
+  });
+  </script>
+   
+  {% endblock %}
   
-  </body>
-</html>
