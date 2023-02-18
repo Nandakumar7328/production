@@ -28,6 +28,26 @@
                  <p> {{cycle_data.count}}</p>
                 </div>
          </div>
+         <div id="chart" class='chart' style='width:100%;'></div>
+        <script>
+          const chartSeries = {{ cycle_data.chart_one|safe }};
+    
+          const options = {
+            chart: {
+              type: 'line',
+            },
+            series: [chartSeries],
+            xaxis: {
+              type: 'number',
+            },
+            yaxis: {
+              min: 0,
+            },
+          };
+    
+          const chart = new ApexCharts(document.querySelector('#chart'), options);
+          chart.render();
+        </script>
     </div>
 </div>
 {% endblock %}

@@ -4,14 +4,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max,Min, Avg,F, DateTimeField,Count, Window
+from django.db.models import Max,Min, Avg,Sum, FloatField,F
 from django.db.models.functions import Trunc
 from datetime import datetime,time
 from django.db.models.functions import Cast
 from django.db.models import FloatField
 from django.utils.datastructures import MultiValueDictKeyError
 from .models import Data,Process
-from django.db.models.expressions import RawSQL
+
 
 
 
@@ -165,15 +165,20 @@ def dashboard(request):
 def cycle(request):
     avg_duration = Process.objects.annotate(duration_float=Cast('duration', FloatField())).aggregate(Avg('duration_float'))['duration_float__avg']
     print(avg_duration)
-    unique_cycle_count = Process.objects.distinct('cycle_number').count()
+
+    unique_cycle_count = Process.objects.distinct().count()
     print(unique_cycle_count)
-    data_store = Process.objects.all()
-    print(data_store)
-    result_object = {}
-    for i in data_store:
-        result_object[i.cycle_number] = i.duration
-    print(result_object)
-    cycleData = {'duration':round(avg_duration),'count':unique_cycle_count}
+    queryset = Process.objects.values('cycle_number').annotate(
+    total_duration=Sum(Cast('duration', output_field=FloatField()))
+    )
+    print(queryset)
+    chart_series = {
+            'name': 'Scores',
+            'data': [{'x': item['cycle_number'], 'y': round(item['total_duration'])} for item in queryset],
+           }
+    print(chart_series)
+    
+    cycleData = {'duration':round(avg_duration),'count':unique_cycle_count,'chart_one':chart_series}
     return render(request,'cycle.html',{'cycle_data':cycleData})
 def return_home(request) :
     return redirect('home')  
