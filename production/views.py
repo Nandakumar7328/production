@@ -8,9 +8,9 @@ from django.db.models import Max,Min, Avg,Sum, FloatField,F
 from django.db.models.functions import Trunc
 from datetime import datetime,time
 from django.db.models.functions import Cast
-from django.db.models import FloatField
+from django.db.models import FloatField,TimeField
 from django.utils.datastructures import MultiValueDictKeyError
-from .models import Data,Process
+from .models import Data,Process,processalert,Shift
 
 
 
@@ -165,13 +165,14 @@ def dashboard(request):
 def cycle(request):
     avg_duration = Process.objects.annotate(duration_float=Cast('duration', FloatField())).aggregate(Avg('duration_float'))['duration_float__avg']
     print(avg_duration)
-
-    unique_cycle_count = Process.objects.distinct().count()
+    unique_cycle_count = Process.objects.values('cycle_number').distinct().count()
     print(unique_cycle_count)
+    processes = Process.objects.order_by('start_time')
+    
     queryset = Process.objects.values('cycle_number').annotate(
     total_duration=Sum(Cast('duration', output_field=FloatField()))
     )
-    print(queryset)
+ 
     chart_series = {
             'name': 'Scores',
             'data': [{'x': item['cycle_number'], 'y': round(item['total_duration'])} for item in queryset],
@@ -180,5 +181,49 @@ def cycle(request):
     
     cycleData = {'duration':round(avg_duration),'count':unique_cycle_count,'chart_one':chart_series}
     return render(request,'cycle.html',{'cycle_data':cycleData})
+@login_required
+def report(request):
+    if request.method == "POST":
+        cam_name = request.POST['camera']
+        report_shift = request.POST['report_shift']
+        print(cam_name,report_shift)
+        shiftData = Shift.objects.values('name','start_time','end_time')
+        print(shiftData)
+        start= ''
+        end = ''
+        cam = ''
+        if cam_name == 'Camera One':
+            cam = 'furnace7'
+        else:
+            cam = 'furnace8'
+            
+        if report_shift == 'Morning':
+            for i in shiftData:
+                if i['name'] == 'Shift_A':
+                    start = i['start_time']
+                    end = i['end_time'] 
+        elif report_shift == 'Afternoon':
+            for i in shiftData:
+                if i['name'] == 'Shift_B':
+                    start = i['start_time']
+                    end = i['end_time'] 
+        else:
+            for i in shiftData:
+                if i['name'] == 'Shift_C':
+                    start = i['start_time']
+                    end = i['end_time'] 
+        print(start,end)
+        start_time = datetime.strptime(start, '%H:%M:%S').time()
+        end_time = datetime.strptime(end, '%H:%M:%S').time()
+
+        query = processalert.objects.filter(furnace_name = cam).annotate(
+            annotated_time=Cast('started_at', output_field=TimeField())
+        ).filter(annotated_time__gte=start_time, annotated_time__lte=end_time)
+
+        get_all_report = query.filter()
+        return render(request,'report.html',{'report_data':get_all_report})
+    get_all_report = processalert.objects.all()
+    return render(request,'report.html',{'report_data':get_all_report})
+
 def return_home(request) :
     return redirect('home')  

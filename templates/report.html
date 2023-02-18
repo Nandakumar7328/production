@@ -1,0 +1,82 @@
+{% extends 'base.html' %} {% block content %}
+{% load static %}
+<div class='deshbord-container'>
+    <nav class='nav-container'>
+      <div class='sub'>
+      <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
+      <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+      </div>
+        <div class='sub'>
+      <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
+      </div>
+    </nav>
+    <div class='dashboard-sub-container'>
+      <nav class='side-bar'>
+        <a href='home'><i class="fa-solid fa-house bar"></i></a>
+        <a href='dashboard'><i class="fa-solid fa-desktop bar"></i></a>
+        <a href='cycle'> <i class="fa-solid fa-bicycle bar"></i></a>
+        <a href='report'> <i class="fa-solid fa-file bar"></i></a>
+    </nav>
+    <div class='content-container'>
+        <div class='header-container'>
+            <h1>Report</h1>
+            <div>
+                <form method="POST" action="report" >
+                  {% csrf_token %}
+                  <select name='report_shift' class='input-time'>
+                    <option>Morning </option>
+                    <option>Afternoon</option>
+                    <option>Evening</option>
+                  </select>
+                  <select name='camera' class='input-time'>
+                    <option>Camera One</option>
+                    <option>Camera Two</option>
+                  </select>
+                  <button class='filter-btn' type="submit"><i class="fa-solid fa-filter"></i></button>
+                </form>
+              </div>
+          </div>
+          <table class='table' id="datatable">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Camera</th>
+                    <th>Shift</th>
+                    <th>Start Time</th>
+                    <th>Cycle No</th>
+                    <th>Process Name</th>
+                    <th>process Limit</th>
+                    <th>Mail Flag</th>
+                    <th>Extended</th>
+                    <th>Hour</th>
+                    <th>Read</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data_obj in report_data%}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{ data_obj.furnace_name }}</td>
+                    <td>{{ data_obj.shift }}</td>
+                    <td>{{ data_obj.started_at }}</td>
+                    <td>{{ data_obj.cycle_number }}</td>
+                    <td>{{ data_obj.process_name }}</td>
+                    <td>{{ data_obj.process_limit }}</td>
+                    <td>{{ data_obj.mailflag }}</td>
+                    <td>{{ data_obj.exceeded }}</td>
+                    <td>{{ data_obj.hour }}</td>
+                    <td>{{ data_obj.read }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+<script> 
+$(document).ready(function() {
+    $('#datatable').DataTable();
+});
+</script> 
+
+{% endblock %}
