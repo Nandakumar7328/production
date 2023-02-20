@@ -90,25 +90,51 @@
       </table>
     </div>
     <div id="chart" class='chart'></div>
-        <script>
-          const chartSeries = {{ topscore.chart_series|safe }};
+    <script>
     
-          const options = {
-            chart: {
-              type: 'bar',
-            },
-            series: [chartSeries],
-            xaxis: {
-              type: 'date',
-            },
-            yaxis: {
-              min: 0,
-            },
-          };
+    var options = {
+      series: [{
+      name: 'Score',
+      type: 'column',
+      data: {{topscore.score_chart|safe }}
+    }, {
+      name: 'Achieved Target',
+      type: 'line',
+      data: {{topscore.achived_chart|safe }}
+    }],
+      chart: {
+      height: 350,
+      type: 'line',
+    },
+    stroke: {
+      width: [0, 4]
+    },
+    title: {
+      text: 'Production'
+    },
+    dataLabels: {
+      enabled: true,
+      enabledOnSeries: [1]
+    },
+    labels: {{ topscore.date_cahrt|safe }},
+    xaxis: {
+      type: 'datetime'
+    },
+    yaxis: [{
+      title: {
+        text: 'Score',
+      },
     
-          const chart = new ApexCharts(document.querySelector('#chart'), options);
-          chart.render();
-        </script>
+    }, {
+      opposite: true,
+      title: {
+        text: 'Achieved Score'
+      }
+    }]
+    };
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+  </script>
   </div>
   </div>
 </div>

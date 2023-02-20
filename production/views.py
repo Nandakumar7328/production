@@ -129,12 +129,16 @@ def dashboard(request):
                  top_score = Data.objects.filter(Datetime=dt_string, user_id=user_id,Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
                  low_score = Data.objects.filter(Datetime=dt_string,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
                  all_order_data = Data.objects.filter(Datetime=dt_string,user_id=user_id,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
-                 chart_series = {
-                'name': 'Scores',
-                'data': [{'x': item.Datetime.strftime("%Y-%m-%d"), 'y': item.Score} for item in all_order_data],
-                  }
-
-                 send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'chart_series': chart_series}
+                 date_cahrt = []
+                 score_chart = []
+                 achived_chart = []
+                 estimated_chart = []
+                 for i in all_order_data:
+                    date_cahrt.append(i.Datetime.strftime("%Y-%m-%d"))
+                    score_chart.append(i.Score)
+                    achived_chart.append(i.Achieved_target)
+                 
+                 send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,}
                  return render(request,'dashboard.html',{'topscore':send_data})
 
                  
@@ -148,13 +152,20 @@ def dashboard(request):
             top_score = Data.objects.filter(Datetime=date,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
             low_score = Data.objects.filter(Datetime=date,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
             all_order_data = Data.objects.filter(Datetime=date,user_id=user_id,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
-            chart_series = {
-            'name': 'Scores',
-            'data': [{'x': item.Datetime.strftime("%Y-%m-%d"), 'y': item.Score} for item in all_order_data],
-           }
-
-            print(chart_series)
-            send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'chart_series': chart_series}
+        #     chart_series = {
+        #     'name': 'Scores',
+        #     'data': [{'x': item.Datetime.strftime("%Y-%m-%d"), 'y': item.Score} for item in all_order_data],
+        #    }
+            date_cahrt = []
+            score_chart = []
+            achived_chart = []
+            estimated_chart = []
+            for i in all_order_data:
+                    date_cahrt.append(i.Datetime.strftime("%Y-%m-%d"))
+                    score_chart.append(i.Score)
+                    achived_chart.append(i.Achieved_target)
+           
+            send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,}
             return render(request,'dashboard.html',{'topscore':send_data})
         except MultiValueDictKeyError:
             pass
@@ -164,13 +175,15 @@ def dashboard(request):
         low_score = Data.objects.filter(user_id=user_id).aggregate(Min('Score'))['Score__min']
         all_order_data = Data.objects.filter(user_id=user_id).order_by('-Score')
         chart_data = Data.objects.filter(user_id=user_id)
-        chart_series = {
-            'name': 'Scores',
-            'data': [{'x': item.Datetime.strftime("%Y-%m-%d"), 'y': item.Score} for item in chart_data],
-        }
-
-        print(chart_series)
-        send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'chart_series': chart_series}
+        date_cahrt = []
+        score_chart = []
+        achived_chart = []
+        estimated_chart = []
+        for i in all_order_data:
+                    date_cahrt.append(i.Datetime.strftime("%Y-%m-%d"))
+                    score_chart.append(i.Score)
+                    achived_chart.append(i.Achieved_target)
+        send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,}
         return render(request,'dashboard.html',{'topscore':send_data})
 @login_required
 def cycle(request):
@@ -204,7 +217,7 @@ def cycle(request):
             'data': [{'x': item['cycle_number'], 'y': round(item['total_duration'])} for item in queryset],
            }
     print(final)
-    
+   
     cycleData = {'duration':round(avg_duration),'count':unique_cycle_count,'chart_one':chart_series,'chart_two':final}
     return render(request,'cycle.html',{'cycle_data':cycleData})
 @login_required
