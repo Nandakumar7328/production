@@ -1,17 +1,17 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse 
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max,Min, Avg,Sum, FloatField,F
-from django.db.models.functions import Trunc
+from django.db.models import Max,Min, Avg,Sum, FloatField, Count, Case, When, Value, CharField, DateTimeField
 from datetime import datetime,time
 from django.db.models.functions import Cast
 from django.db.models import FloatField,TimeField
 from django.utils.datastructures import MultiValueDictKeyError
-from .models import Data,Process,processalert,Shift
-
+from .models import Data,Process,processalert,Shift,Model_version
+from .forms import myFile
+from django.contrib import messages
+import os
+from django.urls import path
 
 
 
@@ -100,21 +100,32 @@ def dashboard(request):
         try:
             value = request.POST['datetime']
             shift = request.POST['shift']
-            start_time = ''
-            end_time = ''
-            if shift == '6 AM to 12 PM':
-                start_time = time(hour=6, minute=0)
-                end_time = time(hour=12, minute=0)
-            else :
-                start_time = time(hour=13, minute=0)
-                end_time = time(hour=18, minute=0)
+            
+            start= ''
+            end = ''
+            shiftData = Shift.objects.values('name','start_time','end_time')
+            if shift == 'Morning':
+                for i in shiftData:
+                    if i['name'] == 'Shift_A':
+                        start = time(hour=7, minute=0)
+                        end = time(hour=15, minute=0)
+            elif shift == 'Afternoon':
+                for i in shiftData:
+                    if i['name'] == 'Shift_B':
+                        start = time(hour=15, minute=0)
+                        end = time(hour=23, minute=0)
+            else:
+                for i in shiftData:
+                    if i['name'] == 'Shift_C':
+                        start = time(hour=23, minute=0)
+                        end = time(hour=7, minute=0)
             if not value:
                  print(shift,'shift')
                  now = datetime.now()
                  dt_string = now.strftime('%Y-%m-%d')
                  user_id = request.user.id
-                 start_datetime = datetime.combine(datetime.strptime(dt_string, '%Y-%m-%d'), start_time)
-                 end_datetime = datetime.combine(datetime.strptime(dt_string, '%Y-%m-%d'), end_time)
+                 start_datetime = datetime.combine(datetime.strptime(dt_string, '%Y-%m-%d'), start)
+                 end_datetime = datetime.combine(datetime.strptime(dt_string, '%Y-%m-%d'), end)
                  top_score = Data.objects.filter(Datetime=dt_string, user_id=user_id,Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
                  low_score = Data.objects.filter(Datetime=dt_string,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
                  all_order_data = Data.objects.filter(Datetime=dt_string,user_id=user_id,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
@@ -132,8 +143,8 @@ def dashboard(request):
             date = datetime.strptime(value, '%Y-%m-%d').date()
             print(date)
             user_id = request.user.id
-            start_datetime = datetime.combine(date, start_time)
-            end_datetime = datetime.combine(date, end_time)
+            start_datetime = datetime.combine(date, start)
+            end_datetime = datetime.combine(date, end)
             top_score = Data.objects.filter(Datetime=date,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
             low_score = Data.objects.filter(Datetime=date,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
             all_order_data = Data.objects.filter(Datetime=date,user_id=user_id,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
@@ -167,19 +178,34 @@ def cycle(request):
     print(avg_duration)
     unique_cycle_count = Process.objects.values('cycle_number').distinct().count()
     print(unique_cycle_count)
-    processes = Process.objects.order_by('start_time')
-    
+    result = Process.objects.annotate(
+    start_datetime=Cast('start_time', output_field=DateTimeField())
+).annotate(
+    shift=Case(
+        When(start_datetime__hour__range=(0, 6), then=Value('Night Shift')),
+        When(start_datetime__hour__range=(7, 14), then=Value('Day Shift')),
+        default=Value('Evening Shift'),
+        output_field=CharField(),
+    )
+).values('shift').annotate(
+    total_cycles=Count('cycle_number')
+).order_by('shift')
     queryset = Process.objects.values('cycle_number').annotate(
     total_duration=Sum(Cast('duration', output_field=FloatField()))
     )
- 
+    print(result)
+    final = {
+            'name': 'Scores',
+            'data': [{'x': item['shift'], 'y': round(item['total_cycles'])} for item in result],
+           }
+    
     chart_series = {
             'name': 'Scores',
             'data': [{'x': item['cycle_number'], 'y': round(item['total_duration'])} for item in queryset],
            }
-    print(chart_series)
+    print(final)
     
-    cycleData = {'duration':round(avg_duration),'count':unique_cycle_count,'chart_one':chart_series}
+    cycleData = {'duration':round(avg_duration),'count':unique_cycle_count,'chart_one':chart_series,'chart_two':final}
     return render(request,'cycle.html',{'cycle_data':cycleData})
 @login_required
 def report(request):
@@ -225,5 +251,47 @@ def report(request):
     get_all_report = processalert.objects.all()
     return render(request,'report.html',{'report_data':get_all_report})
 
+
+@login_required 
+def upload(request):
+    
+    if request.method == "POST" :
+        myForm = myFile(request.POST,request.FILES)
+        if myForm.is_valid:
+            file_name = request.POST.get('file_name')
+            file_one = request.FILES.get('file_one')
+            file_two = request.FILES.get('file_two')
+            file_last = request.FILES.get('file_last')
+            Model_version.objects.create(model_name=file_name,weights_path=file_one,config_path=file_two,xml_path=file_last).save()
+            
+        return redirect('submited')
+    myForm = myFile()
+    contaxt = {'form':myForm}
+    return render(request,'upload.html',contaxt)
+
+def submited(request):
+    versions = Model_version.objects.all()
+    return render(request, 'submited.html', {'versions': versions})
+
+def deleteFils(request,id):
+    myData = Model_version.objects.get(id=id)
+    myData.delete()
+    # os.remove(myData.weights_path.path)
+    # os.remove(myData.config_path.path)
+    # os.remove(myData.xml_path.path)
+    return redirect('submited')
+def editFils(request,id):
+    if request.method == "POST" :
+        myForm = myFile(request.POST,request.FILES)
+        if myForm.is_valid:
+            file_name = request.POST.get('model_name')
+            file_one = request.FILES.get('file_one')
+            file_two = request.FILES.get('file_two')
+            file_last = request.FILES.get('file_last')
+            Model_version.objects.filter(id=id).update(model_name=file_name,weights_path=file_one,config_path=file_two,xml_path=file_last)
+            return redirect('submited')
+    myData = Model_version.objects.get(id=id)
+    return render(request, 'editfile.html', {'versions': myData})
+    
 def return_home(request) :
     return redirect('home')  

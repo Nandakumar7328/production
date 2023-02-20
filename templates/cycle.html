@@ -16,22 +16,34 @@
         <a href='dashboard'><i class="fa-solid fa-desktop bar"></i></a>
         <a href='cycle'> <i class="fa-solid fa-bicycle bar"></i></a>
         <a href='report'> <i class="fa-solid fa-file bar"></i></a>
+        <a href='upload'><i class="fas fa-upload bar"></i></a>
     </nav>
     <div class='content-container'>
         <h1>Cycle Analitics</h1>
-        <div class='score-card-conatiner'>
-            <div class='top-score-card' style='text-align:center; background-color:#fefefe;'>
-                 <h1>Average duration</h1>
-                 <p>{{cycle_data.duration}}</p>
+         <div class='score-card-conatiner'>
+          <div class='top-score-card'>
+           <div class='card-icon'>
+            <i class="fas fa-hourglass-half bar"></i>
+           </div>
+           <div class='score-para'>
+           <h1 class='heading-score'>{{cycle_data.duration}}</h1>
+              <p class='para-score'>Average Duration</p>
+           </div>
+           </div>
+           <div class='top-score-card'>
+             <div class='card-icon-two'>
+              <i class="fa-solid fa-bicycle bar"></i>
              </div>
-             
-             <div class='low-score-card' style='text-align:center; background-color:#fefefe;'>
-                 <h1>No of Cycle</h1>
-                 <p> {{cycle_data.count}}</p>
-                </div>
-         </div>
-         <div id="chart" class='chart' style='width:100%;'></div>
-        <script>
+             <div class='score-para'>
+               <h1 class='heading-score'>{{cycle_data.count}}</h1>
+               <p class='para-score'>Total Cycle</p>
+             </div>
+              </div>
+       </div>
+         
+          <div id="chart" class='chart' style='width:100%;'></div>
+          
+          <script>
           const chartSeries = {{ cycle_data.chart_one|safe }};
     
           const options = {
@@ -50,6 +62,7 @@
           const chart = new ApexCharts(document.querySelector('#chart'), options);
           chart.render();
         </script>
+       
     </div>
 </div>
 {% endblock %}

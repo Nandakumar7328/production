@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {% block content %}
+{% load static %}
+  <body>
+    <div>
+      <nav class='nav-container'>
+        <div class='sub'>
+          <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
+        <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+        </div>
+          <div class='sub'>
+        <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
+        </div>
+      </nav>
+    <div class='content-container'>
+        <div class='header-container'>
+            <h1>Edit Files</h1>
+        </div>
+        <div class='upload-container'>
+        <form class='form-container' action='' method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="model_name">File Name</label>
+            <input class='form-control' name='model_name' type='text' value={{versions.model_name}}/>
+            <label for="weights_file">Weights File</label>
+            <input class='form-control' name='file_one' type='file' value= {{versions.file_one}}/>
+            <label for="config_file">Config File</label>
+           <input class='form-control' type='file' name='file_two' value=  {{versions.file_two}}/>
+            <label for="xml_file">XML File</label>
+            <input class='form-control' type='file' name='file_last' value=  {{versions.file_last}}/>
+            <button class='btn' type="submit">Re Upload</button>
+          </form>
+        </div>
+    </div>
+  </div>
+  {% endblock %}

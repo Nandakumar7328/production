@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% block content %}
+{% load static %}
+<div class='deshbord-container'>
+  <nav class='nav-container'>
+    <div class='sub'>
+    <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
+    <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
+    </div>
+      <div class='sub'>
+    <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
+    </div>
+  </nav>
+  <div class='dashboard-sub-container'>
+    <nav class='side-bar'>
+      <a href='home'><i class="fa-solid fa-house bar"></i></a>
+      <a href='dashboard'><i class="fa-solid fa-desktop bar"></i></a>
+      <a href='cycle'> <i class="fa-solid fa-bicycle bar"></i></a>
+      <a href='report'> <i class="fa-solid fa-file bar"></i></a>
+      <a href='upload'><i class="fas fa-upload bar"></i></a>
+  </nav>
+  <div class='content-container'>
+    <div class='header-container'>
+        <h1>File Details</h1>
+    </div>
+    <div class='file-table'>
+    <table class='table' id="datatable">
+        <thead>
+          <tr>
+            <th>model name</th>
+            <th>weights file</th>
+            <th>config fle</th>
+            <th>xml file</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for version in versions %}
+            <tr>
+              <td>{{ version.model_name }}</td>
+              <td><a href="{{ version.weights_path.url }}">{{ version.weights_path.name }}</a></td>
+              <td><a href="{{ version.config_path.url }}">{{ version.config_path.name }}</a></td>
+              <td><a href="{{ version.xml_path.url }}">{{ version.xml_path.name }}</a></td>
+              <td><a href='editFiles/{{version.id}}'><button class='edit-btn'>Edit</button></a></td>
+              <td><a href='delteFiles/{{version.id}}'><button class='delete-btn'>Delete</button></a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#datatable').DataTable();
+    });
+    </script> 
+{% endblock %}

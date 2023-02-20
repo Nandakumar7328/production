@@ -11,5 +11,9 @@ urlpatterns = [
     path('dashboard',views.dashboard, name='dashboard'),
     path('cycle',views.cycle, name='cycle'),
     path('report',views.report,name='report'),
+    path('upload',views.upload,name='upload'),
+    path('submited',views.submited,name='submited'),
+    path('delteFiles/<int:id>',views.deleteFils,name='deleteFile'),
+    path('editFiles/<int:id>',views.editFils,name='editFile'),
     path('home',views.return_home, name='return_home')
 ]

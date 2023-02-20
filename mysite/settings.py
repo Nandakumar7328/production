@@ -136,6 +136,8 @@ LOGOUT_REDIRECT_URL = '/login/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+MEDIA_URL ='/upload/' 
+MEDIA_ROOT = os.path.join(BASE_DIR,'upload')
 
 # DATABASES = {
 #     'default': {

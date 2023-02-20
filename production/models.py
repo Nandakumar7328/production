@@ -61,3 +61,12 @@ class Process(models.Model):
     def __str__(self):
         return "unique id: %s, Process: %s , Furnace: %s , Start: %s , End: %s , duration: %s" % (
             self.unique_id, self.process_name, self.cam_name, self.start_time, self.end_time, self.duration)
+        
+class Model_version(models.Model):
+    model_name = models.CharField(max_length=100)
+    weights_path = models.FileField()
+    config_path = models.FileField()
+    xml_path = models.FileField()
+
+    def __str__(self):
+        return self.model_name

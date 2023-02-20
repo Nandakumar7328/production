@@ -16,6 +16,7 @@
       <a href='dashboard'><i class="fa-solid fa-desktop bar"></i></a>
       <a href='cycle'> <i class="fa-solid fa-bicycle bar"></i></a>
       <a href='report'> <i class="fa-solid fa-file bar"></i></a>
+      <a href='upload'><i class="fas fa-upload bar"></i></a>
   </nav>
   <div class='content-container'>
     <div class='header-container'>
@@ -25,8 +26,9 @@
           {% csrf_token %}
           <input class='date' type="date" name="datetime">
           <select name='shift' class='input-time'>
-            <option>6 AM to 12 PM</option>
-            <option>1PM to 6 PM</option>
+            <option>Morning </option>
+            <option>Afternoon</option>
+            <option>Evening</option>
           </select>
           <button class='filter-btn' type="submit"><i class="fa-solid fa-filter"></i></button>
         </form>
@@ -34,12 +36,22 @@
     </div>
     <div class='score-card-conatiner'>
        <div class='top-score-card'>
-            <h1>Best Score</h1>
-            <p>{{topscore.top}}</p>
+        <div class='card-icon'>
+        <i class="fas fa-sort-amount-up bar"></i>
         </div>
-        <div class='low-score-card'>
-            <h1>Low Score</h1>
-            <p> {{topscore.low}}</p>
+        <div class='score-para'>
+        <h1 class='heading-score'>{{topscore.top}}</h1>
+           <p class='para-score'>Best Score</p>
+        </div>
+        </div>
+        <div class='top-score-card'>
+          <div class='card-icon-two'>
+            <i class="fa-solid fa-chart-simple bar"></i>
+          </div>
+          <div class='score-para'>
+            <h1 class='heading-score'>{{topscore.low}}</h1>
+            <p class='para-score'>Low Score</p>
+          </div>
            </div>
     </div>
     <div  class="result-container-desktop">
