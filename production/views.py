@@ -306,6 +306,9 @@ def editFils(request,id):
             return redirect('submited')
     myData = Model_version.objects.get(id=id)
     return render(request, 'editfile.html', {'versions': myData})
+
+def livecam(request):
+    return render (request,'cam.html')
     
 def return_home(request) :
     return redirect('home')  

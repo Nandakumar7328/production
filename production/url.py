@@ -15,5 +15,6 @@ urlpatterns = [
     path('submited',views.submited,name='submited'),
     path('delteFiles/<int:id>',views.deleteFils,name='deleteFile'),
     path('editFiles/<int:id>',views.editFils,name='editFile'),
+    path('livecam',views.livecam,name='livecam'),
     path('home',views.return_home, name='return_home')
 ]
