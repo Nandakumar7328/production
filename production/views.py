@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -288,10 +288,11 @@ def submited(request):
 
 def deleteFils(request,id):
     myData = Model_version.objects.get(id=id)
+    version = get_object_or_404(Model_version, pk=id)
     myData.delete()
-    # os.remove(myData.weights_path.path)
-    # os.remove(myData.config_path.path)
-    # os.remove(myData.xml_path.path)
+    os.remove(version.weights_path.path)
+    os.remove(version.config_path.path)
+    os.remove(version.xml_path.path)
     return redirect('submited')
 def editFils(request,id):
     if request.method == "POST" :
