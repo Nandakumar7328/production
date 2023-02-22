@@ -23,6 +23,8 @@ def home(request):
         achived = int(request.POST["two"])
         result = round((achived/ estimated)* 100)
         user_id = request.user.id
+        user_name = request.user.username 
+        print(user_name)
         bonus = 0 
         if result > estimated :
             bonus = result - estimated 
@@ -41,7 +43,6 @@ def home(request):
             user_id=user_id
         )
         return redirect('home')
-    
     user_id = request.user.id
     data = Data.objects.filter(user_id=user_id)
     print(data,"me")
@@ -126,9 +127,9 @@ def dashboard(request):
                  user_id = request.user.id
                  start_datetime = datetime.combine(datetime.strptime(dt_string, '%Y-%m-%d'), start)
                  end_datetime = datetime.combine(datetime.strptime(dt_string, '%Y-%m-%d'), end)
-                 top_score = Data.objects.filter(Datetime=dt_string, user_id=user_id,Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
-                 low_score = Data.objects.filter(Datetime=dt_string,user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
-                 all_order_data = Data.objects.filter(Datetime=dt_string,user_id=user_id,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
+                 top_score = Data.objects.filter( user_id=user_id,Time__range=(start_datetime, end_datetime)).aggregate(Max('Score'))['Score__max']
+                 low_score = Data.objects.filter(user_id=user_id ,Time__range=(start_datetime, end_datetime)).aggregate(Min('Score'))['Score__min']
+                 all_order_data = Data.objects.filter(user_id=user_id,Time__gte=start_datetime.time(),Time__lte=end_datetime.time()).order_by('-Score')
                  date_cahrt = []
                  score_chart = []
                  achived_chart = []
@@ -138,7 +139,9 @@ def dashboard(request):
                     score_chart.append(i.Score)
                     achived_chart.append(i.Achieved_target)
                  
-                 send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,}
+                 total_estimated = Data.objects.filter(user_id=user_id).aggregate(Sum('Estimated_target'))['Estimated_target__sum']
+                 total_achived = Data.objects.filter(user_id=user_id).aggregate(Sum('Achieved_target'))['Achieved_target__sum']
+                 send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,'total_estimated':total_estimated,'total_achived':total_achived}
                  return render(request,'dashboard.html',{'topscore':send_data})
 
                  
@@ -164,13 +167,16 @@ def dashboard(request):
                     date_cahrt.append(i.Datetime.strftime("%Y-%m-%d"))
                     score_chart.append(i.Score)
                     achived_chart.append(i.Achieved_target)
-           
-            send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,}
+            total_estimated = Data.objects.filter(user_id=user_id).aggregate(Sum('Estimated_target'))['Estimated_target__sum']
+            total_achived = Data.objects.filter(user_id=user_id).aggregate(Sum('Achieved_target'))['Achieved_target__sum']
+            send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,'total_estimated':total_estimated,'total_achived':total_achived}
             return render(request,'dashboard.html',{'topscore':send_data})
         except MultiValueDictKeyError:
             pass
     else:
         user_id = request.user.id
+        total_estimated = Data.objects.filter(user_id=user_id).aggregate(Sum('Estimated_target'))['Estimated_target__sum']
+        total_achived = Data.objects.filter(user_id=user_id).aggregate(Sum('Achieved_target'))['Achieved_target__sum']
         top_score = Data.objects.filter(user_id=user_id).aggregate(Max('Score'))['Score__max']
         low_score = Data.objects.filter(user_id=user_id).aggregate(Min('Score'))['Score__min']
         all_order_data = Data.objects.filter(user_id=user_id).order_by('-Score')
@@ -183,7 +189,7 @@ def dashboard(request):
                     date_cahrt.append(i.Datetime.strftime("%Y-%m-%d"))
                     score_chart.append(i.Score)
                     achived_chart.append(i.Achieved_target)
-        send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,}
+        send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,'total_estimated':total_estimated,'total_achived':total_achived}
         return render(request,'dashboard.html',{'topscore':send_data})
 @login_required
 def cycle(request):
@@ -309,6 +315,12 @@ def editFils(request,id):
 
 def livecam(request):
     return render (request,'cam.html')
-    
+
+
+def reset(request):
+    return redirect('dashboard')
+
+def account(request):
+    return render(request,'account.html')
 def return_home(request) :
     return redirect('home')  

@@ -16,5 +16,7 @@ urlpatterns = [
     path('delteFiles/<int:id>',views.deleteFils,name='deleteFile'),
     path('editFiles/<int:id>',views.editFils,name='editFile'),
     path('livecam',views.livecam,name='livecam'),
-    path('home',views.return_home, name='return_home')
+    path('home',views.return_home, name='return_home'),
+    path('reset',views.reset,name='reset'),
+    path('account',views.account,name='account')
 ]

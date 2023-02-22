@@ -1,28 +1,8 @@
 {% extends 'base.html' %} {% block content %}
 {% load static %}
-<div class='deshbord-container'>
-  <nav class='nav-container'>
-    <div class='sub'>
-    <a href='home'><img src={% static 'image/—Pngtree—product analysis_2849807.png' %} alt="logo" class='logo'/></a>
-    <h1><span class='app-name'>Production</span> <span class='half'>Analyser</span></h1>
-    </div>
-      <div class='sub'>
-    <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
-    </div>
-  </nav>
-  <div class='dashboard-sub-container'>
-    <nav class='side-bar'>
-      <a href='home'><i class="fa-solid fa-house bar"></i></a>
-      <a href='dashboard'><i class="fa-solid fa-desktop bar"></i></a>
-      <a href='cycle'> <i class="fa-solid fa-bicycle bar"></i></a>
-      <a href='report'> <i class="fa-solid fa-file bar"></i></a>
-      <a href='upload'><i class="fas fa-upload bar"></i></a>
-      <a href='submited'><i class="fas fa-file-import bar"></i></a>
-      <a href='livecam'><i class="fas fa-camera bar"></i></a>
-  </nav>
-  <div class='content-container'>
+
     <div class='header-container'>
-        <h1>Upload Files</h1>
+        <p class='heading'>Upload Files</p>
     </div>
     <div class='upload-container'>
     <form class='form-container' action='' method="POST" enctype="multipart/form-data">
@@ -38,7 +18,5 @@
         <button class='btn' type="submit">Upload</button>
       </form>
     </div>
-</div>
-</div>
 
 {% endblock %}
