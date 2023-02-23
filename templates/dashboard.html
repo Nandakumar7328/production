@@ -12,15 +12,15 @@
             <option>Afternoon</option>
             <option>Evening</option>
           </select>
-          <a href='reset'><button class='filter-btn'><i class="fa-solid fa-arrow-rotate-left"></i></button></a>
-          <button class='filter-btn' type="submit"><i class="fa-solid fa-filter"></i></button>
+          <a href='reset'><button class='filter-btn'><i class="bi bi-arrow-clockwise"></i></button></a>
+          <button class='filter-btn' type="submit"><i class="bi bi-filter"></i></button>
         </form>
       </div>
     </div>
     <div class='score-card-conatiner'>
        <div class='top-score-card'>
         <div class='card-icon'>
-        <i class="fas fa-sort-amount-up bar"></i>
+        <i class="bi bi-sort-up bar"></i>
         </div>
         <div class='score-para'>
         <h1 class='heading-score'>{{topscore.top}}</h1>
@@ -29,7 +29,7 @@
         </div>
         <div class='top-score-card'>
           <div class='card-icon-two'>
-            <i class="fa-solid fa-chart-simple bar"></i>
+            <i class="bi bi-sort-down bar"></i>
           </div>
           <div class='score-para'>
             <h1 class='heading-score'>{{topscore.low}}</h1>
@@ -38,7 +38,7 @@
            </div>
            <div class='top-score-card'>
             <div class='card-icon-four'>
-            <i class="fas fa-sort-amount-up bar"></i>
+            <i class="bi bi-bullseye bar"></i>
             </div>
             <div class='score-para'>
             <h1 class='heading-score'>{{topscore.total_estimated}}</h1>
@@ -47,7 +47,7 @@
             </div>
             <div class='top-score-card'>
               <div class='card-icon-five'>
-              <i class="fas fa-sort-amount-up bar"></i>
+              <i class="bi bi-bar-chart-steps bar"></i>
               </div>
               <div class='score-para'>
               <h1 class='heading-score'>{{topscore.total_achived}}</h1>
@@ -55,11 +55,11 @@
               </div>
               </div>
     </div>
-    <div  class="result-container-desktop">
+    <div  >
       <h1 class='heading'>Rank Details</h1>
-      <table class='table' id="datatable">
+      <table class='table table-bordered border-primary' id="datatable">
           <thead>
-              <tr>
+              <tr class="table-active">
                   <th>S.No</th>
                   <th>Estimated Target</th>
                   <th>Achieved Target</th>
@@ -75,15 +75,15 @@
           <tbody>
               {% for data_obj in topscore.allData %}
               <tr>
-                  <td>{{forloop.counter}}</td>
+                  <td class="table-active">{{forloop.counter}}</td>
                   <td>{{ data_obj.Estimated_target }}</td>
                   <td>{{ data_obj.Achieved_target }}</td>
                   <td>{{ data_obj.Score }}</td>
                   <td>{{ data_obj.Bonus }}</td>
                   <td>{{ data_obj.Datetime }}</td>
                   <td>{{ data_obj.Time }}</td>
-                  <td><a href='updateData/{{data_obj.id}}'><button class='edit-btn'>Edit</button></a></td>
-                  <td><a href='deleteData/{{data_obj.id}}'><button class='delete-btn'>Delete</button></a></td>
+                  <td><a href='updateData/{{data_obj.id}}'><button class="btn btn-success"><i class="bi bi-pen"></i> Edit</button></a></td>
+                  <td><a href='deleteData/{{data_obj.id}}'><button class='btn btn-danger'><i class="bi bi-trash"></i> Delete</button></a></td>
               </tr>
               {% endfor %}
           </tbody>

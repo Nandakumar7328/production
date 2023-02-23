@@ -3,8 +3,9 @@
       <p class='heading'>Profile</p>
         <div class='profile-container'>
         <img src='https://res.cloudinary.com/duv0mhzrm/image/upload/v1665994997/Avatar_hzuzbt.png' class='avatar'/>
+        <hr class="hr-line" /> 
         <p class='username'>username-: {{ user.username }}</p>
         <p class='username'>super user-: {{ user.is_superuser }}</p>
-        <a href="{% url 'logout' %}"><button class='btn'>Logout</button></a>
-        </div>
+        <a href="{% url 'logout' %}"><button class='btn btn-danger'>Logout</button></a>
+        </div> 
 {% endblock %}

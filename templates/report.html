@@ -15,13 +15,13 @@
                     <option>Camera One</option>
                     <option>Camera Two</option>
                   </select>
-                  <button class='filter-btn' type="submit"><i class="fa-solid fa-filter"></i></button>
+                  <button class='filter-btn' type="submit"><i class="bi bi-filter"></i></button>
                 </form>
               </div>
           </div>
-          <table class='table' id="datatable">
+          <table class='table table-bordered border-primary' id="datatable">
             <thead>
-                <tr>
+                <tr class="table-active">
                     <th>S.No</th>
                     <th>Camera</th>
                     <th>Shift</th>
@@ -38,7 +38,7 @@
             <tbody>
                 {% for data_obj in report_data%}
                 <tr>
-                    <td>{{forloop.counter}}</td>
+                    <td class="table-active">{{forloop.counter}}</td>
                     <td>{{ data_obj.furnace_name }}</td>
                     <td>{{ data_obj.shift }}</td>
                     <td>{{ data_obj.started_at }}</td>
