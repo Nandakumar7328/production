@@ -1,17 +1,15 @@
 {% extends 'base.html' %} {% block content %}
 {% load static %}
-<div class="main-container">
-    <div class='dashbord-containetr-over'>
-      <div class='date-card-conatiner'>
+
+    
     <form class="sub-container" action="/updateData/{{datas.id}}" method="POST" autocomplete="off">
       {% csrf_token %}
-      <lable class="leble">Estimated target</lable>
-      <input class="input" name="Estimated"  placeholder="Estimated target" value={{datas.Estimated_target}}  type="number" />
-      <lable class="leble">Achieved target</lable>
-      <input class="input" name="Achieved" placeholder="Achieved target" value={{datas.Achieved_target}}  type="number" />
-      <button class='btn' type="submit">Update</button>
+      <lable class="form-label">Estimated target</lable>
+      <input class="form-control" name="Estimated"  placeholder="Estimated target" value={{datas.Estimated_target}}  type="number" />
+      <lable class="form-label">Achieved target</lable>
+      <input class="form-control" name="Achieved" placeholder="Achieved target" value={{datas.Achieved_target}}  type="number" />
+      <button class='btn btn-success' type="submit">Update</button>
     </form>
-  </div>
-</div>
-  </div>
+ 
+
   {% endblock %}
