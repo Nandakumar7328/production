@@ -18,5 +18,6 @@ urlpatterns = [
     path('livecam',views.livecam,name='livecam'),
     path('home',views.return_home, name='return_home'),
     path('reset',views.reset,name='reset'),
+    path('mail',views.mail,name='mail'),
     path('account',views.account,name='account')
 ]

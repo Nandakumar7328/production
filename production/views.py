@@ -11,7 +11,15 @@ from .models import Data,Process,processalert,Shift,Model_version
 from .forms import myFile
 from django.contrib import messages
 import os
-from django.urls import path
+from django.core.mail import EmailMessage
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
+
+
 
 
 
@@ -320,6 +328,34 @@ def livecam(request):
 def reset(request):
     return redirect('dashboard')
 
+def mail(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        mail = request.POST['mail']
+        buf = io.BytesIO()
+        c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+        textObj = c.beginText()
+        textObj.setTextOrigin(inch, inch)
+        textObj.setFont("Helvetica", 5)
+        get_all_report = processalert.objects.all()
+        for i in get_all_report:
+            temp = f"Furnace Name: {i.furnace_name}\nShift: {i.shift}\nStarted At: {i.started_at}\nCycle Number: {i.cycle_number}\nProcess Name: {i.process_name}\nProcess Limit: {i.process_limit}\nExceeded: {i.exceeded}\nHour: {i.hour}\nRead: {i.read}\nTime: {i.time}"
+            textObj.textLine(temp)
+        c.drawText(textObj)
+        c.showPage()
+        c.save()
+        buf.seek(0)
+        message = EmailMessage(
+           subject=title,
+           body='report from spritle',  
+           from_email='nanduaru333@gmail.com',
+           to=[mail],
+           reply_to=['nanduaru333@gmail.com'],
+        )
+        message.attach('report.pdf', buf.getvalue(), 'application/pdf')
+        message.send()
+
+    return render(request, 'mail.html')
 def account(request):
     return render(request,'account.html')
 def return_home(request) :
