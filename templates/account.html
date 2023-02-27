@@ -6,9 +6,9 @@
         <hr class="hr-line" /> 
         <p class='username'>username-: {{ user.username }}</p>
         <p class='username'>super user-: {{ user.is_superuser }}</p>
-        {% if user.is_superuser == True %}
-        <a href="admin"><button class='btn btn-success' style='margin-bottom: 10px;' >Admin</button></a>
-    {% endif %}
         <a href="{% url 'logout' %}"><button class='btn btn-danger'>Logout</button></a>
+        {% if user.is_superuser == True %}
+        <a href="admin" style='margin-top: 10px;'>Open Admin <i class="bi bi-arrow-right"></i></a>
+    {% endif %}
         </div> 
 {% endblock %}
