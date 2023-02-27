@@ -1,0 +1,56 @@
+{% extends "layouts/base.html" %}
+{% load i18n static %}
+
+{% block title %} home {% endblock title %}
+
+{% block overlay %}
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+{% endblock overlay %}
+{% block content %}
+<div class='content-container'>
+    <div class='header-container'>
+        <p class='heading'>Live Camera</p>
+          <select id="camera-selector" class='input-time'>
+              <option value="right">Right Camera</option>
+              <option value="left">Left Camera</option>
+            </select>
+      </div>
+      <div class='image-cam-container'>
+      <img id="right-cam" src='https://9009-27-5-114-249.in.ngrok.io/video_stream/Area%201' alt='right-cam' class='cam-image'/>
+      <img id="left-cam" src='https://9009-27-5-114-249.in.ngrok.io/video_stream/Area%201' alt='right-cam' class='cam-image'/>
+    </div>
+      </div>
+  <script>
+      const rightCam = document.getElementById("right-cam");
+      const leftCam = document.getElementById("left-cam");
+      const activityStatus = document.getElementById("activity-status");
+      const cameraSelector = document.getElementById("camera-selector");
+  
+      {% comment %} error in fetch data {% endcomment %}
+  
+      const eventSource = new EventSource("https://9009-27-5-114-249.in.ngrok.io/activity");
+  
+      eventSource.onmessage = function(event) {
+        console.log("data", event.data);
+      };
+      
+      eventSource.onerror = function(event) {
+        console.error("error", event.target.readyState);
+      };
+  
+      cameraSelector.addEventListener("change", () => {
+        const selectedCamera = cameraSelector.value;
+        if (selectedCamera === "right") {
+          rightCam.style.display = "block";
+          leftCam.style.display = "none";
+        } else {
+          rightCam.style.display = "none";
+          leftCam.style.display = "block";
+        }
+      });
+  
+  </script>
+</div>
+
+
+{% endblock content %}

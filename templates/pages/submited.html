@@ -1,0 +1,49 @@
+{% extends "layouts/base.html" %}
+{% load i18n static %}
+
+{% block title %} home {% endblock title %}
+
+{% block overlay %}
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+{% endblock overlay %}
+{% block content %}
+<div class='content-container'>
+    <div class='header-container'>
+        <p class='heading'>File Details</p>
+      </div>
+     
+      <table class='table table-bordered border-primary' id="datatable">
+          <thead>
+            <tr class="table-active">
+              <th>S.No</th>
+              <th>model name</th>
+              <th>weights file</th>
+              <th>config fle</th>
+              <th>xml file</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for version in versions %}
+              <tr>
+                <td class="table-active">{{forloop.counter}}</td>
+                <td>{{ version.model_name }}</td>
+                <td><a href="{{ version.weights_path.url }}">{{ version.weights_path.name }}</a></td>
+                <td><a href="{{ version.config_path.url }}">{{ version.config_path.name }}</a></td>
+                <td><a href="{{ version.xml_path.url }}">{{ version.xml_path.name }}</a></td>
+                <td><a href='editFiles/{{version.id}}'><button class="btn btn-success"><i class="bi bi-pen"></i> Edit</button></a></td>
+                <td><a href='delteFiles/{{version.id}}'><button class='btn btn-danger'><i class="bi bi-trash"></i> Delete</button></a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      
+   
+  </div>
+  <script>
+    $(document).ready(function() {
+        $('#datatable').DataTable();
+    });
+    </script>
+{% endblock content %}

@@ -23,12 +23,14 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
+     path('', include('admin_argon.urls')),
     path('', include('production.url')),
     path('admin/', admin.site.urls),
-    path('', include('admin_argon.urls')),
+   
     
      
 ]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+

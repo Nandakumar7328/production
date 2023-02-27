@@ -7,7 +7,7 @@
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
 {% endblock overlay %}
 
-{% comment %} {% block content %}
+{% block content %}
 <div class="container-fluid py-4">
   <div class="row">
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -385,8 +385,7 @@
   {% include 'includes/footer.html' %}
 </div>
 
-{% endblock content %} {% endcomment %}
-
+{% endblock content %}
 
 {% block scripts %}
 

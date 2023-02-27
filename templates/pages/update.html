@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+{% load i18n static %}
+
+{% block title %} home {% endblock title %}
+
+{% block overlay %}
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+{% endblock overlay %}
+{% block content %}
+<div class='content-container'>
+
+    <form class="sub-container" action="/updateData/{{datas.id}}" method="POST" autocomplete="off">
+        {% csrf_token %}
+        <lable class="form-label">Estimated target</lable>
+        <input class="form-control" name="Estimated"  placeholder="Estimated target" value={{datas.Estimated_target}}  type="number" />
+        <lable class="form-label">Achieved target</lable>
+        <input class="form-control" name="Achieved" placeholder="Achieved target" value={{datas.Achieved_target}}  type="number" />
+        <button class='btn btn-success' type="submit">Update</button>
+      </form>
+   
+ </div>
+
+{% endblock content %}

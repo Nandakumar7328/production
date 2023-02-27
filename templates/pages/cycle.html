@@ -1,0 +1,60 @@
+{% extends "layouts/base.html" %}
+{% load i18n static %}
+
+{% block title %} home {% endblock title %}
+
+{% block overlay %}
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+{% endblock overlay %}
+{% block content %}
+<div class='content-container'>
+
+    <p class='heading'>Cycle Analitics</p>
+    <div class='score-card-conatiner'>
+     <div class='top-score-card'>
+      <div class='card-icon'>
+       <i class="fas fa-hourglass-half bar"></i>
+      </div>
+      <div class='score-para'>
+      <h1 class='heading-score'>{{cycle_data.duration}}</h1>
+         <p class='para-score'>Average Duration</p>
+      </div>
+      </div>
+      <div class='top-score-card'>
+        <div class='card-icon-four'>
+         <i class="fa-solid fa-bicycle bar"></i>
+        </div>
+        <div class='score-para'>
+          <h1 class='heading-score'>{{cycle_data.count}}</h1>
+          <p class='para-score'>Total Cycle</p>
+        </div>
+         </div>
+  </div>
+    
+     <div id="chart" class='chart' style='width:100%;'></div>
+     
+ 
+  </div>
+    
+  <script>
+    const chartSeries = {{ cycle_data.chart_one|safe }};
+
+    const options = {
+      chart: {
+        type: 'line',
+      },
+      series: [chartSeries],
+      xaxis: {
+        type: 'category',
+      },
+      yaxis: {
+        min: 0,
+      },
+    };
+
+    const chart = new ApexCharts(document.querySelector('#chart'), options);
+    chart.render();
+  </script>
+
+
+{% endblock content %}

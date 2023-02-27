@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+{% load i18n static %}
+{% block title %} home {% endblock title %}
+{% block overlay %}
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+{% endblock overlay %}
+{% block content %}
+<div class='content-container'>
+
+    <div class='header-container'>
+        <p class='heading'>Edit Files</p>
+      </div>
+      <div class='upload-container'>
+      <form  action='' method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <label for="model_name">File Name</label>
+          <input class='form-control' name='model_name' type='text' value={{versions.model_name}}/>
+          <label for="weights_file">Weights File</label>
+          <input class='form-control' name='file_one' type='file' value= {{versions.file_one}}/>
+          <label for="config_file">Config File</label>
+         <input class='form-control' type='file' name='file_two' value=  {{versions.file_two}}/>
+          <label for="xml_file">XML File</label>
+          <input class='form-control' type='file' name='file_last' value=  {{versions.file_last}}/>
+          <button class='btn btn-primary' type="submit">Upload</button>
+        </form>
+      </div>
+ </div>
+
+{% endblock content %}

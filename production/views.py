@@ -55,9 +55,9 @@ def home(request):
     data = Data.objects.filter(user_id=user_id)
     print(data,"me")
     if (data != ''):
-         return render(request, 'index.html',{'datas':data})
+         return render(request, 'pages/home.html',{'datas':data})
     else:
-         return render(request, 'index.html')
+         return render(request, 'pages/home.html')
 
 def register(request):
     if request.method == 'POST':
@@ -96,7 +96,7 @@ def updateData(request,id):
         
         return redirect('home')
         
-    return render(request,'update.html',{'datas':myData})
+    return render(request,'pages/update.html',{'datas':myData})
 @login_required
 def deleteData(request,id):
     myData = Data.objects.get(id=id)
@@ -150,7 +150,7 @@ def dashboard(request):
                  total_estimated = Data.objects.filter(user_id=user_id).aggregate(Sum('Estimated_target'))['Estimated_target__sum']
                  total_achived = Data.objects.filter(user_id=user_id).aggregate(Sum('Achieved_target'))['Achieved_target__sum']
                  send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,'total_estimated':total_estimated,'total_achived':total_achived}
-                 return render(request,'dashboard.html',{'topscore':send_data})
+                 return render(request,'pages/dashboard.html',{'topscore':send_data})
 
                  
             print(value, 'selected')
@@ -178,7 +178,7 @@ def dashboard(request):
             total_estimated = Data.objects.filter(user_id=user_id).aggregate(Sum('Estimated_target'))['Estimated_target__sum']
             total_achived = Data.objects.filter(user_id=user_id).aggregate(Sum('Achieved_target'))['Achieved_target__sum']
             send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,'total_estimated':total_estimated,'total_achived':total_achived}
-            return render(request,'dashboard.html',{'topscore':send_data})
+            return render(request,'pages/dashboard.html',{'topscore':send_data})
         except MultiValueDictKeyError:
             pass
     else:
@@ -198,7 +198,8 @@ def dashboard(request):
                     score_chart.append(i.Score)
                     achived_chart.append(i.Achieved_target)
         send_data = {'top':top_score,'low':low_score,'allData':all_order_data,'date_cahrt':date_cahrt,'score_chart':score_chart,'achived_chart':achived_chart,'total_estimated':total_estimated,'total_achived':total_achived}
-        return render(request,'dashboard.html',{'topscore':send_data})
+        return render(request,'pages/dashboard.html',{'topscore':send_data})
+    
 @login_required
 def cycle(request):
     avg_duration = Process.objects.annotate(duration_float=Cast('duration', FloatField())).aggregate(Avg('duration_float'))['duration_float__avg']
@@ -233,7 +234,7 @@ def cycle(request):
     print(final)
    
     cycleData = {'duration':round(avg_duration),'count':unique_cycle_count,'chart_one':chart_series,'chart_two':final}
-    return render(request,'cycle.html',{'cycle_data':cycleData})
+    return render(request,'pages/cycle.html',{'cycle_data':cycleData})
 @login_required
 def report(request):
     if request.method == "POST":
@@ -274,9 +275,9 @@ def report(request):
         ).filter(annotated_time__gte=start_time, annotated_time__lte=end_time)
 
         get_all_report = query.filter()
-        return render(request,'report.html',{'report_data':get_all_report})
+        return render(request,'pages/report.html',{'report_data':get_all_report})
     get_all_report = processalert.objects.all()
-    return render(request,'report.html',{'report_data':get_all_report})
+    return render(request,'pages/report.html',{'report_data':get_all_report})
 
 
 @login_required 
@@ -294,11 +295,11 @@ def upload(request):
         return redirect('submited')
     myForm = myFile()
     contaxt = {'form':myForm}
-    return render(request,'upload.html',contaxt)
+    return render(request,'pages/upload.html',contaxt)
 
 def submited(request):
     versions = Model_version.objects.all()
-    return render(request, 'submited.html', {'versions': versions})
+    return render(request, 'pages/submited.html', {'versions': versions})
 
 def deleteFils(request,id):
     myData = Model_version.objects.get(id=id)
@@ -319,10 +320,10 @@ def editFils(request,id):
             Model_version.objects.filter(id=id).update(model_name=file_name,weights_path=file_one,config_path=file_two,xml_path=file_last)
             return redirect('submited')
     myData = Model_version.objects.get(id=id)
-    return render(request, 'editfile.html', {'versions': myData})
+    return render(request, 'pages/editfile.html', {'versions': myData})
 
 def livecam(request):
-    return render (request,'cam.html')
+    return render (request,'pages/cam.html')
 
 
 def reset(request):
@@ -355,7 +356,7 @@ def mail(request):
         message.attach('report.pdf', buf.getvalue(), 'application/pdf')
         message.send()
 
-    return render(request, 'mail.html')
+    return render(request, 'pages/mail.html')
 def account(request):
     return render(request,'account.html')
 def return_home(request) :
